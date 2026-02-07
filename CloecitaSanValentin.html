@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Cloe 💗</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(180deg,#ffd6e7,#ffeef6);
+    font-family:'Quicksand',sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    text-align:center;
+}
+
+
+.container{
+    max-width:90%;
+    animation:fadeIn 1.2s ease;
+}
+
+
+h1{
+    font-size:34px;
+    color:#d63384;
+    margin-bottom:26px;
+    transition:opacity .6s ease, transform .6s ease;
+}
+
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+}
+
+
+button{
+    font-size:20px;
+    padding:12px 28px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    transition:transform .3s ease, opacity .3s ease;
+}
+
+
+#yes{background:#ff5fa2;color:white;}
+#no{background:#e0e0e0;color:#555;}
+
+
+.hidden{display:none;}
+
+
+.final{
+    font-size:32px;
+    color:#d63384;
+    opacity:0;
+    animation:fadeUp 1.2s forwards;
+    margin:12px 0;
+}
+
+
+img{
+    max-width:80%;
+    margin-top:24px;
+    border-radius:20px;
+    box-shadow:0 12px 28px rgba(0,0,0,.2);
+    opacity:0;
+    animation:fadeUp 1.6s forwards, flotar 2s ease-in-out infinite alternate;
+}
+
+
+.heart{
+    position:fixed;
+    top:-20px;
+    font-size:24px;
+    animation:fall linear forwards;
+    pointer-events:none;
+}
+
+
+.nowrap{
+    white-space:nowrap;
+}
+
+
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0;}
+}
+
+
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(.95)}
+    to{opacity:1;transform:scale(1)}
+}
+
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+
+@keyframes flotar{
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="container" id="app"></div>
+
+
+<script>
+const questions=[
+ "Cloe, ¿quieres ser mi mujer?",
+ '¿Estás segura? <span class="nowrap">👉👈</span>',
+ "¿Estás segurísima? 😳",
+ "¿Pero de verdad de la buena? 😧"
+];
+
+
+let step=0, yesScale=1, noScale=1;
+const app=document.getElementById("app");
+
+
+function render(){
+ yesScale=1; noScale=1;
+
+
+ app.innerHTML=`
+  <h1>${questions[step]}</h1>
+  <div class="buttons">
+    <button id="yes">Sí 💖</button>
+    <button id="no">No</button>
+  </div>
+ `;
+
+
+ const yes=document.getElementById("yes");
+ const no=document.getElementById("no");
+
+
+ yes.onclick=()=>{
+  app.style.opacity=0;
+  app.style.transform="scale(0.98)";
+  setTimeout(()=>{
+    step++;
+    app.style.opacity=1;
+    app.style.transform="scale(1)";
+    step<questions.length ? render() : finale();
+  },900);
+ };
+
+
+ no.onclick=()=>{
+  yesScale+=0.28;
+  noScale-=0.22;
+
+
+  yes.style.transform=`scale(${yesScale})`;
+  no.style.transform=`scale(${Math.max(noScale,0)})`;
+  no.style.opacity=noScale;
+
+
+  if(noScale<=0.15){
+    no.classList.add("hidden");
+  }
+ };
+}
+
+
+function hearts(){
+ setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent="💗";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(3+Math.random()*3)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+ },280);
+}
+
+
+function finale(){
+ app.innerHTML="";
+ hearts();
+
+
+ const texts=[
+  "Gracias",
+  "Te quiero mi niña",
+  "Feliz San Valentín"
+ ];
+
+
+ let i=0;
+ function show(){
+  if(i<texts.length){
+    const d=document.createElement("div");
+    d.className="final";
+    d.textContent=texts[i++];
+    app.appendChild(d);
+    setTimeout(show,1600);
+  }else{
+    const img=document.createElement("img");
+    img.src="https://i.imgur.com/UYz3BFz.jpg"; // 👈 PON AQUÍ EL ENLACE O NOMBRE DE TU IMAGEN
+    app.appendChild(img);
+  }
+ }
+ setTimeout(show,1200);
+}
+
+
+render();
+</script>
+
+
+</body>
+</html>
